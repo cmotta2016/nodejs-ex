@@ -1,7 +1,7 @@
 try {
    timeout(time: 20, unit: 'MINUTES') {
-      def appName="${NAME}"
-      def project=""
+      def appName="nodejs-mongodb-example"
+      def project="jenkins-external"
       def tag="blue"
       def altTag="green"
 
