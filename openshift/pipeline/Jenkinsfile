@@ -6,7 +6,7 @@ try {
       def altTag="green"
 
       node("nodejs") {
-        project = env.PROJECT_NAME
+        project = "jenkins-external"
         stage("Initialize") {
           sh "oc get route ${appName} -n ${project} -o jsonpath='{ .spec.to.name }' --loglevel=4 > activeservice"
           activeService = readFile('activeservice').trim()
