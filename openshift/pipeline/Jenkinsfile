@@ -10,14 +10,10 @@ try {
       node("nodejs") {
         project = "jenkins-external"
         stage('create') {
-          steps {
-            script {
               openshift.withCluster() {
                 openshift.withProject() {
                   openshift.newApp(templatePath) 
                 }
-            }
-          }
         }
       }
         stage("Initialize") {
