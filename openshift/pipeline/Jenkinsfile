@@ -1,5 +1,7 @@
 try {
    timeout(time: 20, unit: 'MINUTES') {
+      def templatePath = 'https://raw.githubusercontent.com/cmotta2016/nodejs-ex/master/openshift/templates/bluegreen.json'
+      def templateName = 'bluegreen-pipeline' 
       def appName="nodejs-mongodb-example"
       def project="jenkins-external"
       def tag="blue"
@@ -7,6 +9,17 @@ try {
 
       node("nodejs") {
         project = "jenkins-external"
+        stage('create') {
+          steps {
+            script {
+              openshift.withCluster() {
+                openshift.withProject() {
+                  openshift.newApp(templatePath) 
+                }
+            }
+          }
+        }
+      }
         stage("Initialize") {
           sh "oc get route ${appName} -n ${project} -o jsonpath='{ .spec.to.name }' --loglevel=4 > activeservice"
           activeService = readFile('activeservice').trim()
