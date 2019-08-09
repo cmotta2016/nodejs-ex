@@ -33,7 +33,7 @@
                "spec": {
                   "containers": [
                      {
-                        "image": "docker-registry.default.svc:5000/cicd/nodejs-ex:latest",
+                        "image": "docker-registry.default.svc:5000/nodejs-ex/nodejs-ex:latest",
                         "imagePullPolicy": "Always",
                         "name": "nodejs-ex",
                         "ports": [
