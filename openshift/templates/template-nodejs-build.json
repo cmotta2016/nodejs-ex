@@ -1,0 +1,60 @@
+{
+   "apiVersion": "v1",
+   "kind": "Template",
+   "labels": {
+      "template": "nodejs-build"
+   },
+   "metadata": {
+      "name": "nodejs-build"
+   },
+   "objects": [
+      {
+         "apiVersion": "v1",
+         "kind": "ImageStream",
+         "metadata": {
+            "annotations": {
+               "description": "Keeps track of changes in the application image"
+            },
+            "name": "nodejs-ex"
+         }
+      },
+      {
+         "apiVersion": "build.openshift.io/v1",
+         "kind": "BuildConfig",
+         "metadata": {
+            "labels": {
+               "app": "nodejs-ex"
+            },
+            "name": "nodejs-ex"
+         },
+         "spec": {
+            "output": {
+               "to": {
+                  "kind": "ImageStreamTag",
+                  "name": "nodejs-ex:latest"
+               }
+            },
+            "postCommit": {
+               "script": "npm test -- --coverage"
+            },
+            "runPolicy": "Serial",
+            "source": {
+               "git": {
+                  "uri": "https://github.com/cmotta2016/nodejs-ex"
+               },
+               "type": "Git"
+            },
+            "strategy": {
+               "sourceStrategy": {
+                  "from": {
+                     "kind": "ImageStreamTag",
+                     "name": "nodejs:10",
+                     "namespace": "openshift"
+                  }
+               },
+               "type": "Source"
+            },
+        }
+      }
+   ]
+}
