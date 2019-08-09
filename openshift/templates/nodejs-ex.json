@@ -54,28 +54,7 @@
                },
                "type": "Source"
             },
-            "triggers": [
-               {
-                  "imageChange": null,
-                  "type": "ImageChange"
-               },
-               {
-                  "type": "ConfigChange"
-               },
-               {
-                  "github": {
-                     "secret": "secret101"
-                  },
-                  "type": "GitHub"
-               },
-               {
-                  "generic": {
-                     "secret": "secret101"
-                  },
-                  "type": "Generic"
-               }
-            ]
-         }
+        }
       }
    ]
 }
