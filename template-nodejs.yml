@@ -47,41 +47,6 @@ objects:
     postCommit:
       script: npm test -- --coverage
     runPolicy: Serial
-- apiVersion: apps.openshift.io/v1
-  kind: DeploymentConfig
-  metadata:
-    labels:
-      app: "${LABEL}"
-    name: "${NAME}"
-  spec:
-    strategy:
-      type: "Rolling"
-    triggers:
-    - type: ImageChange
-      imageChangeParams:
-        automatic: false
-        containerNames:
-        - nodejs-backend-dev
-        from: 
-          kind: ImageStreamTag
-          name: "${NAME}:latest"
-    - type: ConfigChange
-    replicas: 1
-    selector:
-      app: nodejs-backend-dev
-      deploymentconfig: nodejs-backend-dev
-    template:
-      metadata:
-        labels:
-          app: nodejs-backend-dev
-          deploymentconfig: nodejs-backend-dev
-      spec:
-        containers:
-        - image: " "
-          name: nodejs-backend-dev
-          ports:
-            - containerPort: 8080
-              protocol: TCP
 - apiVersion: v1
   kind: Service
   metadata:
@@ -93,10 +58,10 @@ objects:
     - name: web
       port: 8080
       protocol: TCP
-      targetPort: 8080
+      targetPort: 3000
     selector:
-      app: nodejs-backend-dev
-      deploymentconfig: nodejs-backend-dev
+      app: "${NAME}"
+      deploymentconfig: "${NAME}"
 - apiVersion: route.openshift.io/v1
   kind: Route
   metadata:
@@ -109,6 +74,41 @@ objects:
     to:
       kind: Service
       name: "${NAME}"
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: "${LABEL}"
+    name: "${NAME}"
+  spec:
+    strategy:
+      type: "Rolling"
+    triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - "${NAME}"
+        from: 
+          kind: ImageStreamTag
+          name: "${NAME}:latest"
+    - type: ConfigChange
+    replicas: 1
+    selector:
+      app: "${NAME}"
+      deploymentconfig: "${NAME}"
+    template:
+      metadata:
+        labels:
+          app: "${LABEL}"
+          deploymentconfig: "${NAME}"
+      spec:
+        containers:
+        - image: " "
+          name: "${NAME}"
+          ports:
+            - containerPort: 3000
+              protocol: TCP
 parameters:
 - name: NAME
   displayName: Name
