@@ -16,7 +16,6 @@ timestamps{
                     sh "oc delete all -l app=${label} -n node-backend-1"
                 }
                 stage('create') {
-                    def PROJETO = 'node-backend-1'
                     sh "oc new-app --file=template-nodejs.yml --param=LABEL=dev-backend --param=NAME=dev-backend --namespace=node-backend-1"
                     sleep (30)
                 }
