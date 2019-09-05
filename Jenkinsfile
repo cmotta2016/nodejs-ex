@@ -33,17 +33,17 @@ timestamps{
             }
         }
         openshift.withCluster() {
-            openshift.withProject('node-backend-1') {
+            openshift.withProject('node-backend') {
                 stage('cleanup') {
-                    sh "oc delete all -l app=${label} -n node-backend-1"
+                    sh "oc delete all -l app=${label} -n node-backend"
                 }
                 stage('create') {
-                    def PROJETO = 'node-backend-1'
-                    sh "oc new-app --file=template-nodejs.yml --param=LABEL=dev-backend --param=NAME=dev-backend --namespace=node-backend-1"
-                    sleep (30)
+                    def PROJETO = 'node-backend'
+                    sh "oc new-app --file=template-nodejs.yml --param=LABEL=dev-backend --param=NAME=dev-backend --namespace=node-backend"
+                    sh 'oc logs -f bc/dev-backend --namespace=node-backend'
                 }
                 stage('BuildConfig') {
-                    sh 'oc delete buildconfig -l app=dev-backend -n node-backend-1'
+                    sh 'oc delete buildconfig -l app=dev-backend -n node-backend'
                     def build = openshift.newBuild(".", "--strategy=source", "--name=dev-backend", "--labels app=dev-backend")
                     build.logs('-f')
                 }
