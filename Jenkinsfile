@@ -11,13 +11,13 @@ timestamps {
             sh 'npm test'
         }
         stage('Build'){
-            sh 's2i build . openshift/nodejs-010-centos7 cmotta2016/nodejs-ex --loglevel 5 --network host'
+            sh 's2i build . openshift/nodejs-010-centos7 cmotta2016/k8s-nodejs --loglevel 1 --network host'
         }
         stage('Push Image'){
             withCredentials([usernamePassword(credentialsId: 'docker-io', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
             sh '''
             docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-            docker push cmotta2016/nodejs-ex
+            docker push cmotta2016/k8s-nodejs-ex
             '''
             }
         }
