@@ -30,6 +30,6 @@ spec:
   spec:
    containers: 
     - name: nodejs
-      image: cmotta2016/nodejs-ex
+      image: cmotta2016/k8s-nodejs
       ports:
        - containerPort: 8080
