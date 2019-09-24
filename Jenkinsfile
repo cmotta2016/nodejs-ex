@@ -17,7 +17,7 @@ timestamps {
             withCredentials([usernamePassword(credentialsId: 'docker-io', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
             sh '''
             docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-            docker push cmotta2016/k8s-nodejs-ex
+            docker push cmotta2016/k8s-nodejs
             '''
             }
         }
