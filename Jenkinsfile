@@ -10,6 +10,10 @@ timestamps {
         stage ('Test'){
             sh 'npm test'
         }
+        stage ('Code Quality'){
+            def sonar = load sonar.groovy'
+            sonar.codeQuality()
+        }
         stage('Build'){
             sh 's2i build . openshift/nodejs-010-centos7 cmotta2016/k8s-nodejs --loglevel 1 --network host'
         }
