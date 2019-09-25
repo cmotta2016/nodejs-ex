@@ -11,7 +11,7 @@ timestamps {
             sh 'npm test'
         }
         stage ('Code Quality'){
-            def sonar = load sonar.groovy
+            def sonar = load 'sonar.groovy'
             sonar.codeQuality()
         }
         stage('Build'){
