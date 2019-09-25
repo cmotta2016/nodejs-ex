@@ -27,6 +27,7 @@ spec:
   metadata:
    labels:
     component: web
+    app: nodejs
   spec:
    containers: 
     - name: nodejs
