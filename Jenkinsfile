@@ -22,6 +22,7 @@ timestamps {
             sh '''
             docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
             docker push cmotta2016/k8s-nodejs
+            docker rmi -f cmotta2016/k8s-nodejs
             '''
             }
         }
