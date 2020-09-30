@@ -13,7 +13,7 @@ spec:
       http:
         paths:
           - backend:
-              servicename: nodejs-ex-service
+              serviceName: nodejs-ex-service
               servicePort: 8080
             path: /
   tls:
