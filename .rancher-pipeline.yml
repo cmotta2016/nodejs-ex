@@ -1,0 +1,26 @@
+stages:
+- name: Compile
+  steps:
+  - runScriptConfig:
+      image: node:latest
+      shellScript: npm install
+- name: Test
+  steps:
+  - runScriptConfig:
+      image: node:latest
+      shellScript: npm test
+- name: Build Image
+  steps:
+  - publishImageConfig:
+      dockerfilePath: ./Dockerfile
+      buildContext: .
+      tag: cmotta2016/rancher-node
+      pushRemote: true
+      registry: index.docker.io
+- name: Deploy
+  steps:
+  - applyYamlConfig:
+      path: ./deployment.yaml
+timeout: 60
+branch: {}
+notification: {}
