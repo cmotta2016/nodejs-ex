@@ -1,0 +1,120 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: nodejs-ex
+  namespace: nodejs
+  labels:
+    app: nodejs-ex
+spec:
+  rules:
+    - host: nodejs-ex.apps.linux4sysadmin.com.br
+      http:
+        paths:
+          - backend:
+              servicename: nodejs-ex-service
+              servicePort: 8080
+            path: /
+  tls:
+    - hosts:
+        - nodejs-ex.apps.linux4sysadmin.com.br
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: nodejs-ex-service
+ namespace: nodejs
+ labels:
+   app: nodejs-ex
+spec:
+ selector:
+   app: nodejs-ex
+ ports:
+  - port: 8080
+    targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ labels:
+   app: nodejs-ex
+ name: nodejs-ex
+ namespace: nodejs
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   app: nodejs-ex
+ template:
+  metadata:
+   labels:
+    app: nodejs-ex
+  spec:
+   containers: 
+    - name: nodejs-ex
+      image: "cmotta2016/rancher-node"
+      imagePullPolicy: Always
+      resources:
+        limits:
+          cpu: 250m
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 256Mi
+      ports:
+       - containerPort: 3000
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 3000
+          scheme: HTTP
+        initialDelaySeconds: 10
+        timeoutSeconds: 2
+        periodSeconds: 10
+        successThreshold: 1
+        failureThreshold: 3
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 3000
+          scheme: HTTP
+        initialDelaySeconds: 30
+        timeoutSeconds: 2
+        periodSeconds: 10
+        successThreshold: 1
+        failureThreshold: 3
+---
+#apiVersion: autoscaling/v2beta2
+#kind: HorizontalPodAutoscaler
+#metadata:
+#  name: nodejs-ex
+#  namespace: nodejs
+#  labels:
+#    app: nodejs-ex
+#spec:
+#  scaleTargetRef:
+#    apiVersion: apps/v1
+#    kind: Deployment
+#    name: nodejs-ex
+#  minReplicas: 1
+#  maxReplicas: 2
+#  metrics:
+#  - type: Resource
+#    resource:
+#      name: cpu
+#      target: 
+#        type: Utilization
+#        averageUtilization: 90
+#---
+#apiVersion: autoscaling.k8s.io/v1
+#kind: VerticalPodAutoscaler
+#metadata:
+#  name: nodejs-ex-vpa
+#spec:
+#  targetRef:
+#    apiVersion: "apps/v1"
+#    kind:       Deployment
+#    name:       nodejs
+#  updatePolicy:
+#    updateMode: "Auto"
