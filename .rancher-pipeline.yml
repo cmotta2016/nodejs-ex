@@ -1,5 +1,0 @@
-stages:
-- name: Deploy
-  steps:
-  - applyYamlConfig:
-      path: ./openshift/pipeline/bluegreen_resources.yaml
